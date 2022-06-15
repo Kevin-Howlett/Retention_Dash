@@ -47,7 +47,7 @@ def main():
         st.session_state['button_pressed'] = False
 
     # Main panel
-    st.title("Predicting NCF Grad Rate")
+    st.title("Predicting NCF Retention")
     
 
     # ======================== #
