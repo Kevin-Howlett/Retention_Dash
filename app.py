@@ -894,7 +894,7 @@ def prepare_first_term(retention):
 
     retention = retention.replace({'FTIC_RETURNED_NEXT_FALL':{1:0, 0:1}}).rename(columns={'FTIC_RETURNED_NEXT_FALL':'FTIC_NO_FALL_RETURN'})
 
-    retention = retention.loc[(ftic_df.ADMIT_TYPE == 'F')]
+    retention = retention.loc[(retention.ADMIT_TYPE == 'F')]
 
     retention = retention.fillna({'UNSUB_FUNDS':0})
 
@@ -942,7 +942,7 @@ def prepare_full_year(retention):
     retention = retention.replace({'FTIC_RETURNED_NEXT_FALL':{1:0, 0:1}}).rename(columns={'FTIC_RETURNED_NEXT_FALL':'FTIC_NO_FALL_RETURN'})
 
     # Subset incoming freshmen
-    retention = retention.loc[(ftic_df.ADMIT_TYPE == 'F')]
+    retention = retention.loc[(retention.ADMIT_TYPE == 'F')]
 
     # Replace NA unsubsidized funds with zero
     retention = retention.fillna({'UNSUB_FUNDS':0})
