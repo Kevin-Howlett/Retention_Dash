@@ -1054,9 +1054,9 @@ def output_preds(munged_df, cat_vars_path, num_vars_path, stats_path, model_path
     preds = [item[1] for item in preds]
 
     # Add to prediction df
-    predictions['Prob of NOT Grad. on Time'] = preds
+    predictions['Prob of NOT Returning'] = preds
 
-    predictions = predictions.sort_values(by='Prob of NOT Grad. on Time', ascending=False)
+    predictions = predictions.sort_values(by='Prob of NOT Returning', ascending=False)
 
     return  predictions
 
