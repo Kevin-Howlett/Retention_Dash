@@ -495,7 +495,7 @@ def prepare_retention(retention, sat, act, col_gpa, gpa, tests,
 
     if st.session_state['option'] == 'Second term (first year)':
         retention = retention.rename(columns = {'RETURNED_FOR_SPRING' : 'FTIC_RETURNED_FOR_SPRING'})
-        retention = retention[['N_NUMBER', 'GENDER_MASTER', 'IS_WHITE', 'ADMIT_TYPE',
+        retention = retention[['N_NUMBER', 'GENDER_MASTER', 'IS_WHITE', 'SPRING_ADMIT',
                                 'TEST_SCORE_N', 'SAT_MATH', 'GPA', 'IN_STATE', 'AP_IB_AICE_FLAG',
                                 'dist_from_ncf', 'rank_percentile', 'TOTAL_FUNDS', 'UNSUB_FUNDS',
                                 'FTIC_RETURNED_FOR_SPRING', 
@@ -508,12 +508,12 @@ def prepare_retention(retention, sat, act, col_gpa, gpa, tests,
                                 'DIVS_Other_1', 'DIVS_Interdivisional_1', 'CREDITS_TAKEN_2',
                                 'SAT_RATE_2', 'AVG_COURSE_LEVEL_2', 'DIVS_Humanities_2',
                                 'DIVS_Natural_Science_2', 'DIVS_Social_Sciences_2', 'DIVS_Other_2',
-                                'DIVS_Interdivisional_2', 'Admit_Age', 'SPRING_ADMIT', 'PARENTS_INCOME',
+                                'DIVS_Interdivisional_2', 'Admit_Age', 'PARENTS_INCOME',
                                 'STUDENT_INCOME', 'FAMILY_CONTRIB', 'FatherHIGrade',
                                 'MotherHIGrade', 'SAP_GOOD']]
 
     elif st.session_state['option'] == 'First term':
-        retention = retention[['N_NUMBER', 'GENDER_MASTER', 'IS_WHITE', 'ADMIT_TYPE',
+        retention = retention[['N_NUMBER', 'GENDER_MASTER', 'IS_WHITE', 'SPRING_ADMIT',
                                 'TEST_SCORE_N', 'SAT_MATH', 'GPA', 'IN_STATE', 'AP_IB_AICE_FLAG',
                                 'dist_from_ncf', 'rank_percentile', 'TOTAL_FUNDS', 'UNSUB_FUNDS',
                                 'Percent of adults with a high school diploma only, 2015-19',
@@ -522,7 +522,7 @@ def prepare_retention(retention, sat, act, col_gpa, gpa, tests,
                                 'CONTRACT_1_GRADE', 'CREDITS_TAKEN_1', 'SAT_RATE_1',
                                 'AVG_COURSE_LEVEL_1', 'DIVS_Humanities_1', 'DIVS_Natural_Science_1',
                                 'DIVS_Social_Sciences_1', 'DIVS_Other_1', 'DIVS_Interdivisional_1',
-                                'Admit_Age', 'SPRING_ADMIT', 'PARENTS_INCOME', 'STUDENT_INCOME',
+                                'Admit_Age', 'PARENTS_INCOME', 'STUDENT_INCOME',
                                 'FAMILY_CONTRIB', 'FatherHIGrade', 'MotherHIGrade']]
 
 
@@ -905,7 +905,7 @@ def prepare_first_term(retention):
     # retention.drop(columns=['SPRING_ADMIT', 'NEXT_TERM', 
     #                     'FTIC_RETURNED_FOR_SPRING', 'ISP_PASSED','SAP_GOOD'], inplace=True)
 
-    retention = retention.drop(columns = ["ADMIT_TYPE", "SPRING_ADMIT"])
+    retention = retention.drop(columns = ["SPRING_ADMIT"])
 
     retention = retention.replace({'GENDER_MASTER':{'M':1,'F':0}})
 
@@ -949,11 +949,10 @@ def prepare_full_year(retention):
 
     retention = retention.dropna(subset=['SAT_RATE_1', 'CONTRACT_1_GRADE'])
 
-    retention.drop(columns=['SPRING_ADMIT', 'ADMIT_TYPE'], inplace=True)
+    retention.drop(columns=['SPRING_ADMIT'], inplace=True)
 
-    retention = retention.replace({'failed_to_grad':{True:1, False:0},
-                                'GENDER_MASTER':{'M':1,'F':0}}
-                                )
+    retention = retention.replace({'GENDER_MASTER':{'M':1,'F':0}})
+
     retention.rename(columns={'GENDER_MASTER':'GENDER_M'}, inplace=True)
 
     retention = retention.fillna({'CREDITS_TAKEN_2':0,
