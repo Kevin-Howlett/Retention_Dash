@@ -25,7 +25,7 @@ legacy_caching.clear_cache()
 
 # ======================== #
 st.set_page_config(
-    page_title="Predicting NCF Grad Rate",
+    page_title="Predicting NCF Retention",
     layout="wide",
     initial_sidebar_state="expanded",
 )
