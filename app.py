@@ -299,11 +299,11 @@ def main():
         
         # Generate and store predictions
         prediction_df = output_preds(munged_df,
-            cat_vars_path='static/grad_rate_pickles/Retention_first_term_cat_vars.pkl', 
-            num_vars_path='static/grad_rate_pickles/Retention_first_term_num_vars.pkl', 
-            stats_path='static/grad_rate_pickles/Retention_first_term_statistics.pkl', 
-            scaler_path='static/grad_rate_pickles/Retention_first_term_scaler.pkl',
-            model_path='static/grad_rate_pickles/Retention_first_term_model.pkl',
+            cat_vars_path='static/retention_pickles/Retention_first_term_cat_vars.pkl', 
+            num_vars_path='static/retention_pickles/Retention_first_term_num_vars.pkl', 
+            stats_path='static/retention_pickles/Retention_first_term_statistics.pkl', 
+            scaler_path='static/retention_pickles/Retention_first_term_scaler.pkl',
+            model_path='static/retention_pickles/Retention_first_term_model.pkl',
             model_type='ridge',
             cats = ['GENDER_M', 'IS_WHITE', 'IN_STATE', 'AP_IB_AICE_FLAG', 'CONTRACT_1_GRADE'])
  
@@ -338,10 +338,10 @@ def main():
         
         # Generate and store predictions
         prediction_df = output_preds(munged_df,
-            cat_vars_path='static/grad_rate_pickles/Retention_full_year_cat_vars.pkl',
-            num_vars_path='static/grad_rate_pickles/Retention_full_year_num_vars.pkl',
-            stats_path='static/grad_rate_pickles/Retention_full_year_statistics.pkl',
-            model_path='static/grad_rate_pickles/Retention_full_year_model.pkl',
+            cat_vars_path='static/retention_pickles/Retention_full_year_cat_vars.pkl',
+            num_vars_path='static/retention_pickles/Retention_full_year_num_vars.pkl',
+            stats_path='static/retention_pickles/Retention_full_year_statistics.pkl',
+            model_path='static/retention_pickles/Retention_full_year_model.pkl',
             model_type='forest',
             cats = ['CONTRACT_1_GRADE', 
                      'CONTRACT_2_GRADE', 'SAP_GOOD', 'ISP_PASSED', 
@@ -904,7 +904,7 @@ def prepare_first_term(retention):
     #                     'FTIC_RETURNED_FOR_SPRING', 'ISP_PASSED','SAP_GOOD'], inplace=True)
 
     retention = retention.replace({'GENDER_MASTER':{'M':1,'F':0}})
-    
+
     retention.rename(columns={'GENDER_MASTER':'GENDER_M'}, inplace=True)
 
     # =================================== #
@@ -937,9 +937,6 @@ def prepare_full_year(retention):
     # Drop Spring Admits
     retention = retention.loc[retention.SPRING_ADMIT==0]
 
-    # Recode response
-    retention = retention.replace({'FTIC_RETURNED_NEXT_FALL':{1:0, 0:1}}).rename(columns={'FTIC_RETURNED_NEXT_FALL':'FTIC_NO_FALL_RETURN'})
-
     # Subset incoming freshmen
     retention = retention.loc[(retention.ADMIT_TYPE == 'F')]
 
@@ -948,12 +945,12 @@ def prepare_full_year(retention):
 
     retention = retention.dropna(subset=['SAT_RATE_1', 'CONTRACT_1_GRADE'])
 
-    retention.drop(columns=['failed_to_grad', 'SPRING_ADMIT', 'ADMIT_TYPE'], inplace=True)
+    retention.drop(columns=['SPRING_ADMIT', 'ADMIT_TYPE'], inplace=True)
 
     retention = retention.replace({'failed_to_grad':{True:1, False:0},
                                 'GENDER_MASTER':{'M':1,'F':0}}
                                 )
-    retention.rename(columns={'ADMIT_TYPE':'IS_TRANSFER', 'GENDER_MASTER':'GENDER_M'}, inplace=True)
+    retention.rename(columns={'GENDER_MASTER':'GENDER_M'}, inplace=True)
 
     retention = retention.fillna({'CREDITS_TAKEN_2':0,
                             'SAT_RATE_2':0,
