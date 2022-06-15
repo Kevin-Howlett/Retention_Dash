@@ -966,7 +966,7 @@ def prepare_full_year(retention):
                             'CONTRACT_2_GRADE':0,
                             'NUM_NONGRADABLE_TAKEN_2':0})
 
-    retention = retention.drop(columns='NEXT_TERM')
+    # retention = retention.drop(columns='NEXT_TERM')
 
     # =================================== #
     # Treat Outliers
