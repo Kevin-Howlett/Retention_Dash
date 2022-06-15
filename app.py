@@ -883,6 +883,8 @@ def prepare_sap(sap):
 
 def prepare_first_term(retention):
 
+
+
     # Drop Collinear Predictors
     retention = retention.drop(columns = ['DIVS_Social_Sciences_1'])
 
@@ -902,6 +904,8 @@ def prepare_first_term(retention):
     # CAN PROBABLY REMOVE
     # retention.drop(columns=['SPRING_ADMIT', 'NEXT_TERM', 
     #                     'FTIC_RETURNED_FOR_SPRING', 'ISP_PASSED','SAP_GOOD'], inplace=True)
+
+    retention = retention.drop(columns = ["ADMIT_TYPE", "SPRING_ADMIT"])
 
     retention = retention.replace({'GENDER_MASTER':{'M':1,'F':0}})
 
