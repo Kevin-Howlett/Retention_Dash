@@ -892,21 +892,20 @@ def prepare_first_term(retention):
     # Replace 9.8 GPA with NA
     retention.replace({'GPA':{9.8:np.nan}}, inplace=True)
 
-    retention = retention.replace({'FTIC_RETURNED_NEXT_FALL':{1:0, 0:1}}).rename(columns={'FTIC_RETURNED_NEXT_FALL':'FTIC_NO_FALL_RETURN'})
-
+    # Subset Incoming Freshmen
     retention = retention.loc[(retention.ADMIT_TYPE == 'F')]
 
     retention = retention.fillna({'UNSUB_FUNDS':0})
 
     retention = retention.dropna(subset=['SAT_RATE_1', 'CONTRACT_1_GRADE'])
 
-    retention.drop(columns=['failed_to_grad', 'SPRING_ADMIT', 'ADMIT_TYPE', 'NEXT_TERM', 
-                        'FTIC_RETURNED_FOR_SPRING', 'ISP_PASSED','SAP_GOOD'], inplace=True)
+    # CAN PROBABLY REMOVE
+    # retention.drop(columns=['SPRING_ADMIT', 'NEXT_TERM', 
+    #                     'FTIC_RETURNED_FOR_SPRING', 'ISP_PASSED','SAP_GOOD'], inplace=True)
 
-    retention = retention.replace({'failed_to_grad':{True:1, False:0},
-                                'GENDER_MASTER':{'M':1,'F':0}}
-                                )
-    retention.rename(columns={'ADMIT_TYPE':'IS_TRANSFER', 'GENDER_MASTER':'GENDER_M'}, inplace=True)
+    retention = retention.replace({'GENDER_MASTER':{'M':1,'F':0}})
+    
+    retention.rename(columns={'GENDER_MASTER':'GENDER_M'}, inplace=True)
 
     # =================================== #
     # Treat Outliers
