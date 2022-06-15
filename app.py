@@ -934,7 +934,7 @@ def prepare_full_year(retention):
     retention = retention.loc[~((retention.FTIC_RETURNED_FOR_SPRING==1) & retention.SAT_RATE_2.isna())]
 
     # Drop Collinear Features
-    retention = retention.drop(columns = ['FAMILY_INCOME', 'DIVS_Natural_Science_2',
+    retention = retention.drop(columns = ['DIVS_Natural_Science_2',
                                         'DIVS_Natural_Science_1','FTIC_RETURNED_FOR_SPRING',
                                         'SAT_RATE_2'])
 
