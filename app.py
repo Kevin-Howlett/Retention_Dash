@@ -894,8 +894,8 @@ def prepare_first_term(retention):
     # Replace 9.8 GPA with NA
     retention.replace({'GPA':{9.8:np.nan}}, inplace=True)
 
-    # Subset Incoming Freshmen
-    retention = retention.loc[(retention.ADMIT_TYPE == 'F')]
+    # # Subset Incoming Freshmen
+    # retention = retention.loc[(retention.ADMIT_TYPE == 'F')]
 
     retention = retention.fillna({'UNSUB_FUNDS':0})
 
@@ -941,8 +941,8 @@ def prepare_full_year(retention):
     # Drop Spring Admits
     retention = retention.loc[retention.SPRING_ADMIT==0]
 
-    # Subset incoming freshmen
-    retention = retention.loc[(retention.ADMIT_TYPE == 'F')]
+    # # Subset incoming freshmen
+    # retention = retention.loc[(retention.ADMIT_TYPE == 'F')]
 
     # Replace NA unsubsidized funds with zero
     retention = retention.fillna({'UNSUB_FUNDS':0})
