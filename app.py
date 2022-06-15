@@ -299,13 +299,13 @@ def main():
         
         # Generate and store predictions
         prediction_df = output_preds(munged_df,
-            cat_vars_path='static/grad_rate_pickles/GradRate_first_term_cat_vars.pkl', 
-            num_vars_path='static/grad_rate_pickles/GradRate_first_term_num_vars.pkl', 
-            stats_path='static/grad_rate_pickles/GradRate_first_term_statistics.pkl', 
-            scaler_path='static/grad_rate_pickles/GradRate_first_term_scaler.pkl',
-            model_path='static/grad_rate_pickles/GradRate_first_term_model.pkl',
+            cat_vars_path='static/grad_rate_pickles/Retention_first_term_cat_vars.pkl', 
+            num_vars_path='static/grad_rate_pickles/Retention_first_term_num_vars.pkl', 
+            stats_path='static/grad_rate_pickles/Retention_first_term_statistics.pkl', 
+            scaler_path='static/grad_rate_pickles/Retention_first_term_scaler.pkl',
+            model_path='static/grad_rate_pickles/Retention_first_term_model.pkl',
             model_type='ridge',
-            cats=['GENDER_M', 'IS_WHITE', 'IS_TRANSFER', 'CONTRACT_1_GRADE', 'IN_STATE', 'AP_IB_AICE_FLAG'])
+            cats = ['GENDER_M', 'IS_WHITE', 'IN_STATE', 'AP_IB_AICE_FLAG', 'CONTRACT_1_GRADE'])
  
         # Display predictions
         st.write('## Predictions')
@@ -338,14 +338,14 @@ def main():
         
         # Generate and store predictions
         prediction_df = output_preds(munged_df,
-            cat_vars_path='static/grad_rate_pickles/GradRate_full_year_cat_vars.pkl',
-            num_vars_path='static/grad_rate_pickles/GradRate_full_year_num_vars.pkl',
-            stats_path='static/grad_rate_pickles/GradRate_full_year_statistics.pkl',
-            model_path='static/grad_rate_pickles/GradRate_full_year_model.pkl',
+            cat_vars_path='static/grad_rate_pickles/Retention_full_year_cat_vars.pkl',
+            num_vars_path='static/grad_rate_pickles/Retention_full_year_num_vars.pkl',
+            stats_path='static/grad_rate_pickles/Retention_full_year_statistics.pkl',
+            model_path='static/grad_rate_pickles/Retention_full_year_model.pkl',
             model_type='forest',
-            cats=['GENDER_M', 'IS_WHITE', 'IS_TRANSFER', 'SPRING_ADMIT', 
-            'CONTRACT_1_GRADE', 'FTIC_RETURNED_FOR_SPRING', 'CONTRACT_2_GRADE', 
-            'SAP_GOOD', 'ISP_PASSED', 'IN_STATE', 'AP_IB_AICE_FLAG'])
+            cats = ['CONTRACT_1_GRADE', 
+                     'CONTRACT_2_GRADE', 'SAP_GOOD', 'ISP_PASSED', 
+                     'GENDER_M', 'IS_WHITE', 'IN_STATE', 'AP_IB_AICE_FLAG'])
         
         # Display predictions
         st.write('## Predictions')
@@ -883,41 +883,38 @@ def prepare_sap(sap):
 
 def prepare_first_term(retention):
 
-
-    # # Drop Collinear Predictors
+    # Drop Collinear Predictors
     retention = retention.drop(columns = ['DIVS_Social_Sciences_1'])
 
-
-
     # Drop Spring Admits
-    retention = retention.loc[~retention.SPRING_ADMIT].reset_index(drop=True)
-
-    # Drop Spring Features
-    retention.drop(columns = ['SPRING_ADMIT'], inplace = True)
-
-    # Fill na scholarships with zero
-    retention = retention.fillna({'UNSUB_FUNDS':0})
-
-    retention = retention.dropna(subset=['SAT_RATE_1', 'CONTRACT_1_GRADE'])
+    retention = retention.loc[(~retention.SPRING_ADMIT)].reset_index(drop=True)
 
     # Replace 9.8 GPA with NA
     retention.replace({'GPA':{9.8:np.nan}}, inplace=True)
 
+    retention = retention.replace({'FTIC_RETURNED_NEXT_FALL':{1:0, 0:1}}).rename(columns={'FTIC_RETURNED_NEXT_FALL':'FTIC_NO_FALL_RETURN'})
+
+    retention = retention.loc[(ftic_df.ADMIT_TYPE == 'F')]
+
+    retention = retention.fillna({'UNSUB_FUNDS':0})
+
+    retention = retention.dropna(subset=['SAT_RATE_1', 'CONTRACT_1_GRADE'])
+
+    retention.drop(columns=['failed_to_grad', 'SPRING_ADMIT', 'ADMIT_TYPE', 'NEXT_TERM', 
+                        'FTIC_RETURNED_FOR_SPRING', 'ISP_PASSED','SAP_GOOD'], inplace=True)
+
     retention = retention.replace({'failed_to_grad':{True:1, False:0},
-                                   'ADMIT_TYPE':{'T':1,'F':0},
-                                   'GENDER_MASTER':{'M':1,'F':0}}
-                                  )
+                                'GENDER_MASTER':{'M':1,'F':0}}
+                                )
     retention.rename(columns={'ADMIT_TYPE':'IS_TRANSFER', 'GENDER_MASTER':'GENDER_M'}, inplace=True)
 
-
-
-    # Cap outliers at avg+-3*IQR
+    # =================================== #
+    # Treat Outliers
     treatoutliers(retention, columns=['GPA', 'dist_from_ncf', 'TOTAL_FUNDS', 
-                                      'Percent of adults with a high school diploma only, 2015-19',
-                                      'Percent of adults with less than a high school diploma, 2015-19',
-                                      'COUNTY_UNEMPLOYMENT_RATE', 'PARENTS_INCOME', 'STUDENT_INCOME',
-                                      'FAMILY_CONTRIB'], factor=3)
-
+                                    'Percent of adults with a high school diploma only, 2015-19',
+                                    'Percent of adults with less than a high school diploma, 2015-19',
+                                    'COUNTY_UNEMPLOYMENT_RATE', 'PARENTS_INCOME', 'STUDENT_INCOME',
+                                    'FAMILY_CONTRIB'], factor = 3)
 
 
 
@@ -929,49 +926,56 @@ def prepare_first_term(retention):
 
 def prepare_full_year(retention):
 
-    # For students who did NOT return in Spring, fill Spring data with zeroes
-    retention.loc[retention.FTIC_RETURNED_FOR_SPRING==0, ['CREDITS_TAKEN_2', 'SAT_RATE_2', 'AVG_COURSE_LEVEL_2',
-           'DIVS_Humanities_2', 'DIVS_Natural_Science_2', 'DIVS_Social_Sciences_2',
-           'DIVS_Other_2', 'DIVS_Interdivisional_2', 'NUM_NONGRADABLE_TAKEN_2', 'CONTRACT_2_GRADE']] = 0
 
+    # Drop FTIC students who returned for Spring but did not have TERM 2 data
+    retention = retention.loc[~((retention.FTIC_RETURNED_FOR_SPRING==1) & retention.SAT_RATE_2.isna())]
+
+    # Drop Collinear Features
+    retention = retention.drop(columns = ['FAMILY_INCOME', 'DIVS_Natural_Science_2',
+                                        'DIVS_Natural_Science_1','FTIC_RETURNED_FOR_SPRING',
+                                        'SAT_RATE_2'])
+
+    # Drop Spring Admits
+    retention = retention.loc[retention.SPRING_ADMIT==0]
+
+    # Recode response
+    retention = retention.replace({'FTIC_RETURNED_NEXT_FALL':{1:0, 0:1}}).rename(columns={'FTIC_RETURNED_NEXT_FALL':'FTIC_NO_FALL_RETURN'})
+
+    # Subset incoming freshmen
+    retention = retention.loc[(ftic_df.ADMIT_TYPE == 'F')]
+
+    # Replace NA unsubsidized funds with zero
     retention = retention.fillna({'UNSUB_FUNDS':0})
 
+    retention = retention.dropna(subset=['SAT_RATE_1', 'CONTRACT_1_GRADE'])
+
+    retention.drop(columns=['failed_to_grad', 'SPRING_ADMIT', 'ADMIT_TYPE'], inplace=True)
+
     retention = retention.replace({'failed_to_grad':{True:1, False:0},
-                                   'SPRING_ADMIT':{True:1, False:0},
-                                   'ADMIT_TYPE':{'T':1,'F':0},
-                                   'GENDER_MASTER':{'M':1,'F':0}}
-                                  )
+                                'GENDER_MASTER':{'M':1,'F':0}}
+                                )
     retention.rename(columns={'ADMIT_TYPE':'IS_TRANSFER', 'GENDER_MASTER':'GENDER_M'}, inplace=True)
 
-    retention.loc[retention['SPRING_ADMIT']==1, 'NUM_NONGRADABLE_TAKEN_2'] = 0
-    retention.loc[retention['SPRING_ADMIT']==1, 'CONTRACT_2_GRADE'] = 0
-    retention.loc[retention['SPRING_ADMIT']==1, 'CREDITS_TAKEN_2'] = 0
-    retention.loc[retention['SPRING_ADMIT']==1, 'SAT_RATE_2'] = 0
-    retention.loc[retention['SPRING_ADMIT']==1, 'AVG_COURSE_LEVEL_2'] = 0
-    retention.loc[retention['SPRING_ADMIT']==1, 'DIVS_Humanities_2'] = 0
-    retention.loc[retention['SPRING_ADMIT']==1, 'DIVS_Natural_Science_2'] = 0
-    retention.loc[retention['SPRING_ADMIT']==1, 'DIVS_Other_2'] = 0
-    retention.loc[retention['SPRING_ADMIT']==1, 'DIVS_Interdivisional_2'] = 0
-    retention.loc[retention['SPRING_ADMIT']==1, 'DIVS_Social_Sciences_2'] = 0
+    retention = retention.fillna({'CREDITS_TAKEN_2':0,
+                            'SAT_RATE_2':0,
+                            'AVG_COURSE_LEVEL_2':0,
+                            'DIVS_Humanities_2':0,
+                            'DIVS_Natural_Science_2':0,
+                            'DIVS_Social_Sciences_2':0,
+                            'DIVS_Other_2':0,
+                            'DIVS_Interdivisional_2':0,
+                            'CONTRACT_2_GRADE':0,
+                            'NUM_NONGRADABLE_TAKEN_2':0})
 
-    retention = retention.dropna(subset=['SAT_RATE_1', 'CONTRACT_1_GRADE', 'SAT_RATE_2', 'CONTRACT_2_GRADE'])
-
-    retention = retention.drop(columns = ['DIVS_Natural_Science_2', 'DIVS_Natural_Science_1',
-                                          'SAT_RATE_2', 'AVG_COURSE_LEVEL_2'])
+    retention = retention.drop(columns='NEXT_TERM')
 
     # =================================== #
-    # Cap large outliers
+    # Treat Outliers
     treatoutliers(retention, columns=['GPA', 'dist_from_ncf', 'TOTAL_FUNDS', 
-                                      'Percent of adults with a high school diploma only, 2015-19',
-                                      'Percent of adults with less than a high school diploma, 2015-19',
-                                      'COUNTY_UNEMPLOYMENT_RATE', 'PARENTS_INCOME', 'STUDENT_INCOME',
-                                      'FAMILY_CONTRIB'], factor=3)
-
-    # -------------- #
-    # REMOVE THIS!!!
-    # retention.drop(columns=['failed_to_grad'],inplace=True)
-
-    # -------------- #
+                                    'Percent of adults with a high school diploma only, 2015-19',
+                                    'Percent of adults with less than a high school diploma, 2015-19',
+                                    'COUNTY_UNEMPLOYMENT_RATE', 'PARENTS_INCOME', 'STUDENT_INCOME',
+                                    'FAMILY_CONTRIB'], factor=3)
 
     return retention
 
