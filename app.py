@@ -296,21 +296,6 @@ def main():
                         income, parent_edu, sap=None)
 
         munged_df = prepare_first_term(retention)
-
-        # Check for Missing Values
-        na_df = pd.DataFrame({'Feature': munged_df.columns.tolist(), 'Prop_NA':(munged_df.isna().sum()/munged_df.shape[0])}).reset_index(drop=True)
-
-        # Check for fully NA columns
-        if (na_df['Prop_NA'] == 1).any():
-            fully_na_features = na_df.loc[na_df['Prop_NA'] == 1, 'Feature'].tolist()
-            st.write('### WARNING: all values are missing for the following columns:')
-            st.write(pd.DataFrame(data=fully_na_features, columns = 'Feature'))
-
-        # Warn user about Features missing more than 50%
-        elif (na_df['Prop_NA'] >= 0.5).any():
-            half_na_features = na_df.loc[na_df['Prop_NA'] >= 0.5, 'Feature'].tolist()
-            st.write('### WARNING: at least 50%\ of values are missing for the following columns:')
-            st.write(pd.DataFrame(data=half_na_features, columns = 'Feature'))
         
         # Generate and store predictions
         prediction_df = output_preds(munged_df,
@@ -350,21 +335,6 @@ def main():
                         income, parent_edu, sap)
 
         munged_df = prepare_full_year(retention)
-
-        # Check for Missing Values
-        na_df = pd.DataFrame({'Feature': munged_df.columns.tolist(), 'Prop_NA':(munged_df.isna().sum()/munged_df.shape[0])}).reset_index(drop=True)
-
-        # Check for fully NA columns
-        if (na_df['Prop_NA'] == 1).any():
-            fully_na_features = na_df.loc[na_df['Prop_NA'] == 1, 'Feature'].tolist()
-            st.write('### WARNING: all values are missing for the following columns:')
-            st.write(pd.DataFrame(data=fully_na_features, columns = 'Feature'))
-
-        # Warn user about Features missing more than 50%
-        elif (na_df['Prop_NA'] >= 0.5).any():
-            half_na_features = na_df.loc[na_df['Prop_NA'] >= 0.5, 'Feature'].tolist()
-            st.write('### WARNING: at least 50%\ of values are missing for the following columns:')
-            st.write(pd.DataFrame(data=half_na_features, columns = 'Feature'))
         
         # Generate and store predictions
         prediction_df = output_preds(munged_df,
