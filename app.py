@@ -898,8 +898,6 @@ def prepare_first_term(retention):
 
     retention = retention.fillna({'UNSUB_FUNDS':0})
 
-    retention = retention.dropna(subset=['SAT_RATE_1', 'CONTRACT_1_GRADE'])
-
     # CAN PROBABLY REMOVE
     # retention.drop(columns=['SPRING_ADMIT', 'NEXT_TERM', 
     #                     'FTIC_RETURNED_FOR_SPRING', 'ISP_PASSED','SAP_GOOD'], inplace=True)
@@ -945,8 +943,6 @@ def prepare_full_year(retention):
 
     # Replace NA unsubsidized funds with zero
     retention = retention.fillna({'UNSUB_FUNDS':0})
-
-    retention = retention.dropna(subset=['SAT_RATE_1', 'CONTRACT_1_GRADE'])
 
     retention.drop(columns=['SPRING_ADMIT'], inplace=True)
 
