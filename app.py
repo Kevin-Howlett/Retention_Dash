@@ -296,6 +296,21 @@ def main():
                         income, parent_edu, sap=None)
 
         munged_df = prepare_first_term(retention)
+
+        # Check for Missing Values
+        na_df = pd.DataFrame({'Feature': munged_df.columns.tolist(), 'Prop_NA':(munged_df.isna().sum()/munged_df.shape[0])}).reset_index(drop=True)
+
+        # Check for fully NA columns
+        if (na_df['Prop_NA'] == 1).any():
+            fully_na_features = na_df.loc[na_df['Prop_NA'] == 1, 'Feature'].tolist()
+            st.write('### WARNING: all values are missing for the following columns:')
+            st.write(pd.DataFrame(data=fully_na_features, columns = 'Feature'))
+
+        # Warn user about Features missing more than 50%
+        elif (na_df['Prop_NA'] >= 0.5).any():
+            half_na_features = na_df.loc[na_df['Prop_NA'] >= 0.5, 'Feature'].tolist()
+            st.write('### WARNING: at least 50%\ of values are missing for the following columns:')
+            st.write(pd.DataFrame(data=half_na_features, columns = 'Feature'))
         
         # Generate and store predictions
         prediction_df = output_preds(munged_df,
@@ -335,6 +350,21 @@ def main():
                         income, parent_edu, sap)
 
         munged_df = prepare_full_year(retention)
+
+        # Check for Missing Values
+        na_df = pd.DataFrame({'Feature': munged_df.columns.tolist(), 'Prop_NA':(munged_df.isna().sum()/munged_df.shape[0])}).reset_index(drop=True)
+
+        # Check for fully NA columns
+        if (na_df['Prop_NA'] == 1).any():
+            fully_na_features = na_df.loc[na_df['Prop_NA'] == 1, 'Feature'].tolist()
+            st.write('### WARNING: all values are missing for the following columns:')
+            st.write(pd.DataFrame(data=fully_na_features, columns = 'Feature'))
+
+        # Warn user about Features missing more than 50%
+        elif (na_df['Prop_NA'] >= 0.5).any():
+            half_na_features = na_df.loc[na_df['Prop_NA'] >= 0.5, 'Feature'].tolist()
+            st.write('### WARNING: at least 50%\ of values are missing for the following columns:')
+            st.write(pd.DataFrame(data=half_na_features, columns = 'Feature'))
         
         # Generate and store predictions
         prediction_df = output_preds(munged_df,
@@ -467,7 +497,6 @@ def prepare_retention(retention, sat, act, col_gpa, gpa, tests,
     retention.loc[(retention.ADMIT_TYPE=='T') & ~retention.College_GPA.isna(), 'GPA_HIGH_SCHOOL'] = retention['College_GPA']
     retention.drop(columns='College_GPA', inplace=True)
     retention.rename(columns={'GPA_HIGH_SCHOOL':'GPA'}, inplace=True)
-    retention = retention.dropna(subset=['GPA'])
     retention = retention.fillna({'TOTAL_FUNDS':0, 'UNSUB_FUNDS':0})
     retention['Admit_Age'] = (round(retention.ADMIT_TERM,-2) - round(retention.BIRTH_DATE,-4)/100)/100
     retention['SPRING_ADMIT'] = (retention.ADMIT_TERM.astype(str).str[-2:] == '01')
@@ -899,8 +928,6 @@ def prepare_first_term(retention):
 
     retention = retention.fillna({'UNSUB_FUNDS':0})
 
-    retention = retention.dropna(subset=['SAT_RATE_1', 'CONTRACT_1_GRADE'])
-
     # CAN PROBABLY REMOVE
     # retention.drop(columns=['SPRING_ADMIT', 'NEXT_TERM', 
     #                     'FTIC_RETURNED_FOR_SPRING', 'ISP_PASSED','SAP_GOOD'], inplace=True)
@@ -946,8 +973,6 @@ def prepare_full_year(retention):
 
     # Replace NA unsubsidized funds with zero
     retention = retention.fillna({'UNSUB_FUNDS':0})
-
-    retention = retention.dropna(subset=['SAT_RATE_1', 'CONTRACT_1_GRADE'])
 
     retention.drop(columns=['SPRING_ADMIT'], inplace=True)
 
