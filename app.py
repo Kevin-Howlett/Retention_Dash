@@ -927,9 +927,8 @@ def prepare_first_term(retention):
 
 def prepare_full_year(retention):
 
-
-    # Drop FTIC students who returned for Spring but did not have TERM 2 data
-    retention = retention.loc[~((retention.FTIC_RETURNED_FOR_SPRING==1) & retention.SAT_RATE_2.isna())]
+    # # Drop FTIC students who returned for Spring but did not have TERM 2 data
+    # retention = retention.loc[~((retention.FTIC_RETURNED_FOR_SPRING==1) & retention.SAT_RATE_2.isna())]
 
     # Drop Collinear Features
     retention = retention.drop(columns = ['DIVS_Natural_Science_2',
