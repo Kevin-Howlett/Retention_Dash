@@ -342,7 +342,8 @@ def main():
             num_vars_path='static/retention_pickles/Retention_full_year_num_vars.pkl',
             stats_path='static/retention_pickles/Retention_full_year_statistics.pkl',
             model_path='static/retention_pickles/Retention_full_year_model.pkl',
-            model_type='forest',
+            scaler_path='static/retention_pickles/Retention_full_year_scaler.pkl',
+            model_type='ridge',
             cats = ['CONTRACT_1_GRADE', 
                      'CONTRACT_2_GRADE', 'SAP_GOOD', 'ISP_PASSED', 
                      'GENDER_M', 'IS_WHITE', 'IN_STATE', 'AP_IB_AICE_FLAG'])
