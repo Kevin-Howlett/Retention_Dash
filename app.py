@@ -77,6 +77,10 @@ def main():
         file_name = str(uploaded_file.name) # parse file_name such that file_name like variable names - # SAT from fall 2016.csv
         file_name = file_name.rsplit(".", 1)[0] # remove file extension - # SAT from fall 2016
         file_name = file_name.lower() # convert to lowercase - # sat from fall 2016
+
+        # Check for ambiguous file names
+        if sum(file_name.count(str(i)) for i in required_datasets) > 1:
+            st.write("### Please rename {} to something like one of the following: {}".format(uploaded_file.name, required_datasets))
         
 
         file_name = re.sub(" ", "_", file_name) # replace spaces with underscores
