@@ -95,26 +95,26 @@ def main():
             act = load_data(uploaded_file)
             files_read_in['act'] = act.columns
         if 'hs_gpa' in file_name:
-            hs_gpa = load_data(uploaded_file)
-            files_read_in['hs_gpa'] = hs_gpa.columns
+            gpa = load_data(uploaded_file)
+            files_read_in['hs_gpa'] = gpa.columns
         if 'college_gpa' in file_name:
-            college_gpa = load_data(uploaded_file)
-            files_read_in['college_gpa'] = college_gpa.columns
+            col_gpa = load_data(uploaded_file)
+            files_read_in['college_gpa'] = col_gpa.columns
         if 'scholarships' in file_name:
             scholarships = load_data(uploaded_file)
             files_read_in['scholarships'] = scholarships.columns
         if 'ap_ib_aice' in file_name:
-            ap_ib_aice = load_data(uploaded_file)
-            files_read_in['ap_ib_aice'] = ap_ib_aice.columns
+            tests = load_data(uploaded_file)
+            files_read_in['ap_ib_aice'] = tests.columns
         if 'rank' in file_name:
             rank = load_data(uploaded_file)
             files_read_in['rank'] = rank.columns
         if 'distance' in file_name:
-            distance = load_data(uploaded_file)
-            files_read_in['distance'] = distance.columns
+            google_dist = load_data(uploaded_file)
+            files_read_in['distance'] = google_dist.columns
         if 'zip' in file_name:
-            zip_code = load_data(uploaded_file)
-            files_read_in['zip_code'] = zip_code.columns
+            zips = load_data(uploaded_file)
+            files_read_in['zip_code'] = zips.columns
         if 'residency' in file_name:
             residency = load_data(uploaded_file)
             files_read_in['residency'] = residency.columns
@@ -122,8 +122,8 @@ def main():
             income = load_data(uploaded_file)
             files_read_in['income'] = income.columns
         if 'education' in file_name:
-            parent_education = load_data(uploaded_file)
-            files_read_in['parent_education'] = parent_education.columns
+            parent_edu = load_data(uploaded_file)
+            files_read_in['parent_education'] = parent_edu.columns
         if 'sap' in file_name:
             sap = load_data(uploaded_file)
             files_read_in['sap'] = sap.columns
