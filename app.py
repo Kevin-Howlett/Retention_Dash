@@ -69,112 +69,170 @@ def main():
     files_read_in = dict()
 
     # File uploaders
+    uploaded_files = st.sidebar.file_uploader("Upload datasets:", accept_multiple_files = True)
+    required_datasets = ['retention', 'course desig', 'sat', 'act', 'hs gpa', 'college gpa', 'scholarships', 'ap ib aice', 'rank', 'distance', 'zip code', 'residency', 'income', 'parent_education' ,'sap'] # partial strings to match
+    for uploaded_file in uploaded_files:
+        st.write("UPLOADED FILENAME:", uploaded_file.name)
+        
+        file_name = str(uploaded_file.name) # parse file_name such that file_name like variable names - # SAT from fall 2016.csv
+        file_name = file_name.rsplit(".", 1)[0] # remove file extension - # SAT from fall 2016
+        file_name = file_name.lower() # convert to lowercase - # sat from fall 2016
+        
 
-    # Retention
-    retention_file = st.sidebar.file_uploader("Upload Retention file:", key=1)
-    if retention_file:
-         # Can be used wherever a "file-like" object is accepted:
-         retention = load_data(retention_file)
-         files_read_in['Retention'] = retention.columns
+        file_name = re.sub(" ", "_", file_name) # replace spaces with underscores
+        print(file_name)
+        file_str_name = str(file_name) + "" # copy file_name as string
+        if 'retention' in file_name:
+            retention = load_data(uploaded_file)
+            files_read_in['retention'] = retention.columns
+        if 'course_desig' in file_name:
+            course_desig = load_data(uploaded_file)
+            files_read_in['course_desig'] = course_desig.columns
+        if 'sat' in file_name:
+            sat = load_data(uploaded_file)
+            files_read_in['sat'] = sat.columns
+        if 'act' in file_name:
+            act = load_data(uploaded_file)
+            files_read_in['act'] = act.columns
+        if 'hs_gpa' in file_name:
+            hs_gpa = load_data(uploaded_file)
+            files_read_in['hs_gpa'] = hs_gpa.columns
+        if 'college_gpa' in file_name:
+            college_gpa = load_data(uploaded_file)
+            files_read_in['college_gpa'] = college_gpa.columns
+        if 'scholarships' in file_name:
+            scholarships = load_data(uploaded_file)
+            files_read_in['scholarships'] = scholarships.columns
+        if 'ap_ib_aice' in file_name:
+            ap_ib_aice = load_data(uploaded_file)
+            files_read_in['ap_ib_aice'] = ap_ib_aice.columns
+        if 'rank' in file_name:
+            rank = load_data(uploaded_file)
+            files_read_in['rank'] = rank.columns
+        if 'distance' in file_name:
+            distance = load_data(uploaded_file)
+            files_read_in['distance'] = distance.columns
+        if 'zip' in file_name:
+            zip_code = load_data(uploaded_file)
+            files_read_in['zip_code'] = zip_code.columns
+        if 'residency' in file_name:
+            residency = load_data(uploaded_file)
+            files_read_in['residency'] = residency.columns
+        if 'income' in file_name:
+            income = load_data(uploaded_file)
+            files_read_in['income'] = income.columns
+        if 'education' in file_name:
+            parent_education = load_data(uploaded_file)
+            files_read_in['parent_education'] = parent_education.columns
+        if 'sap' in file_name:
+            sap = load_data(uploaded_file)
+            files_read_in['sap'] = sap.columns
 
-    # Course designations
-    course_desig_file = st.sidebar.file_uploader("Upload Course designations file:", key=2)
-    if course_desig_file:
-         # Can be used wherever a "file-like" object is accepted:
-         course_desig = load_data(course_desig_file)
-         files_read_in['Course Designations'] = course_desig.columns
+    # # Retention
+    # retention_file = st.sidebar.file_uploader("Upload Retention file:", key=1)
+    # if retention_file:
+    #      # Can be used wherever a "file-like" object is accepted:
+    #      retention = load_data(retention_file)
+    #      files_read_in['Retention'] = retention.columns
 
-    # Course designations
-    sat_file = st.sidebar.file_uploader("Upload SAT Scores file:", key=3)
-    if sat_file:
-         # Can be used wherever a "file-like" object is accepted:
-         sat = load_data(sat_file)
-         files_read_in['SAT'] = sat.columns
+    # # Course designations
+    # course_desig_file = st.sidebar.file_uploader("Upload Course designations file:", key=2)
+    # if course_desig_file:
+    #      # Can be used wherever a "file-like" object is accepted:
+    #      course_desig = load_data(course_desig_file)
+    #      files_read_in['Course Designations'] = course_desig.columns
 
-    # Course designations
-    act_file = st.sidebar.file_uploader("Upload ACT Scores file:", key=4)
-    if act_file:
-         # Can be used wherever a "file-like" object is accepted:
-         act = load_data(act_file)
-         files_read_in['ACT'] = act.columns
+    # # Course designations
+    # sat_file = st.sidebar.file_uploader("Upload SAT Scores file:", key=3)
+    # if sat_file:
+    #      # Can be used wherever a "file-like" object is accepted:
+    #      sat = load_data(sat_file)
+    #      files_read_in['SAT'] = sat.columns
 
-    # Course designations
-    gpa_file = st.sidebar.file_uploader("Upload High School GPA file:", key=5)
-    if gpa_file:
-         # Can be used wherever a "file-like" object is accepted:
-         gpa = load_data(gpa_file)
-         files_read_in['HS GPA'] = gpa.columns
+    # # Course designations
+    # act_file = st.sidebar.file_uploader("Upload ACT Scores file:", key=4)
+    # if act_file:
+    #      # Can be used wherever a "file-like" object is accepted:
+    #      act = load_data(act_file)
+    #      files_read_in['ACT'] = act.columns
 
-    # Course designations
-    col_gpa_file = st.sidebar.file_uploader("Upload College GPA file:", key=6)
-    if col_gpa_file:
-         # Can be used wherever a "file-like" object is accepted:
-         col_gpa = load_data(col_gpa_file)
-         files_read_in['College GPA'] = col_gpa.columns
+    # # Course designations
+    # gpa_file = st.sidebar.file_uploader("Upload High School GPA file:", key=5)
+    # if gpa_file:
+    #      # Can be used wherever a "file-like" object is accepted:
+    #      gpa = load_data(gpa_file)
+    #      files_read_in['HS GPA'] = gpa.columns
 
-    # Course designations
-    scholarships_file = st.sidebar.file_uploader("Upload Scholarships file:", key=7)
-    if scholarships_file:
-         # Can be used wherever a "file-like" object is accepted:
-         scholarships = load_data(scholarships_file)
-         files_read_in['Scholarships'] = scholarships.columns
+    # # Course designations
+    # col_gpa_file = st.sidebar.file_uploader("Upload College GPA file:", key=6)
+    # if col_gpa_file:
+    #      # Can be used wherever a "file-like" object is accepted:
+    #      col_gpa = load_data(col_gpa_file)
+    #      files_read_in['College GPA'] = col_gpa.columns
 
-    # Course designations
-    tests_file = st.sidebar.file_uploader("Upload AP/IB/AICE file:", key=8)
-    if tests_file:
-         # Can be used wherever a "file-like" object is accepted:
-         tests = load_data(tests_file)
-         files_read_in['AP/IB/AICE'] = tests.columns
+    # # Course designations
+    # scholarships_file = st.sidebar.file_uploader("Upload Scholarships file:", key=7)
+    # if scholarships_file:
+    #      # Can be used wherever a "file-like" object is accepted:
+    #      scholarships = load_data(scholarships_file)
+    #      files_read_in['Scholarships'] = scholarships.columns
 
-    # Course designations
-    rank_file = st.sidebar.file_uploader("Upload HS Rank file:", key=9)
-    if rank_file:
-         # Can be used wherever a "file-like" object is accepted:
-         rank = load_data(rank_file)
-         files_read_in['HS Rank'] = rank.columns
+    # # Course designations
+    # tests_file = st.sidebar.file_uploader("Upload AP/IB/AICE file:", key=8)
+    # if tests_file:
+    #      # Can be used wherever a "file-like" object is accepted:
+    #      tests = load_data(tests_file)
+    #      files_read_in['AP/IB/AICE'] = tests.columns
 
-    # Course designations
-    google_dist_file = st.sidebar.file_uploader("Upload Distances from NCF file:", key=10)
-    if google_dist_file:
-         # Can be used wherever a "file-like" object is accepted:
-         google_dist = load_data(google_dist_file)
-         files_read_in['Distances'] = google_dist.columns
+    # # Course designations
+    # rank_file = st.sidebar.file_uploader("Upload HS Rank file:", key=9)
+    # if rank_file:
+    #      # Can be used wherever a "file-like" object is accepted:
+    #      rank = load_data(rank_file)
+    #      files_read_in['HS Rank'] = rank.columns
 
-    # Course designations
-    zips_file = st.sidebar.file_uploader("Upload Zip Codes file:", key=11)
-    if zips_file:
-         # Can be used wherever a "file-like" object is accepted:
-         zips = load_data(zips_file)
-         files_read_in['Zip Codes'] = zips.columns
+    # # Course designations
+    # google_dist_file = st.sidebar.file_uploader("Upload Distances from NCF file:", key=10)
+    # if google_dist_file:
+    #      # Can be used wherever a "file-like" object is accepted:
+    #      google_dist = load_data(google_dist_file)
+    #      files_read_in['Distances'] = google_dist.columns
 
-    # Course designations
-    residency_file = st.sidebar.file_uploader("Upload Residency file:", key=12)
-    if residency_file:
-         # Can be used wherever a "file-like" object is accepted:
-         residency = load_data(residency_file)
-         files_read_in['Residency'] = residency.columns
+    # # Course designations
+    # zips_file = st.sidebar.file_uploader("Upload Zip Codes file:", key=11)
+    # if zips_file:
+    #      # Can be used wherever a "file-like" object is accepted:
+    #      zips = load_data(zips_file)
+    #      files_read_in['Zip Codes'] = zips.columns
 
-    # Course designations
-    income_file = st.sidebar.file_uploader("Upload Income file:", key=13)
-    if income_file:
-         # Can be used wherever a "file-like" object is accepted:
-         income = load_data(income_file)
-         files_read_in['Income'] = income.columns
+    # # Course designations
+    # residency_file = st.sidebar.file_uploader("Upload Residency file:", key=12)
+    # if residency_file:
+    #      # Can be used wherever a "file-like" object is accepted:
+    #      residency = load_data(residency_file)
+    #      files_read_in['Residency'] = residency.columns
 
-    # Course designations
-    parent_edu_file = st.sidebar.file_uploader("Upload Parent Education file:", key=14)
-    if parent_edu_file:
-         # Can be used wherever a "file-like" object is accepted:
-         parent_edu = load_data(parent_edu_file)
-         files_read_in['Parent Education'] = parent_edu.columns
+    # # Course designations
+    # income_file = st.sidebar.file_uploader("Upload Income file:", key=13)
+    # if income_file:
+    #      # Can be used wherever a "file-like" object is accepted:
+    #      income = load_data(income_file)
+    #      files_read_in['Income'] = income.columns
 
-    # SAP file upload depends on current time being run
-    if st.session_state['option']=='Second term (first year)':
-        sap_file = st.sidebar.file_uploader("Upload SAP file:", key=15)
-        if sap_file:
-            # Can be used wherever a "file-like" object is accepted:
-            sap = load_data(sap_file)
-            files_read_in['SAP'] = sap.columns
+    # # Course designations
+    # parent_edu_file = st.sidebar.file_uploader("Upload Parent Education file:", key=14)
+    # if parent_edu_file:
+    #      # Can be used wherever a "file-like" object is accepted:
+    #      parent_edu = load_data(parent_edu_file)
+    #      files_read_in['Parent Education'] = parent_edu.columns
+
+    # # SAP file upload depends on current time being run
+    # if st.session_state['option']=='Second term (first year)':
+    #     sap_file = st.sidebar.file_uploader("Upload SAP file:", key=15)
+    #     if sap_file:
+    #         # Can be used wherever a "file-like" object is accepted:
+    #         sap = load_data(sap_file)
+    #         files_read_in['SAP'] = sap.columns
 
 
 
@@ -187,37 +245,37 @@ def main():
 
     cols_needed = dict()
 
-    cols_needed['Retention'] = ['UNIV_ID', 'ADMIT_TERM', 'ADMIT_TYPE', 'BIRTH_DATE', 'GENDER_MASTER', 'RACE_MASTER']
+    cols_needed['retention'] = ['UNIV_ID', 'ADMIT_TERM', 'ADMIT_TYPE', 'BIRTH_DATE', 'GENDER_MASTER', 'RACE_MASTER']
 
-    cols_needed['Course Designations'] = ['SQ_COUNT_STUDENT_ID', 'TERM', 'CLASS_TITLE', 'GRADABLE_INDICATOR', 'PART_TERM', 'CRS_SUBJ', 'CRS_NUMB', 'CRS_DIVS_DESC', 'ACAD_HIST_GRDE_DESC']
+    cols_needed['course_desig'] = ['SQ_COUNT_STUDENT_ID', 'TERM', 'CLASS_TITLE', 'GRADABLE_INDICATOR', 'PART_TERM', 'CRS_SUBJ', 'CRS_NUMB', 'CRS_DIVS_DESC', 'ACAD_HIST_GRDE_DESC']
 
-    cols_needed['SAT'] = ['N_NUMBER', 'TEST_REQ_CD', 'TEST_SCORE_TYP', 'TEST_SCORE_N']
+    cols_needed['sat'] = ['N_NUMBER', 'TEST_REQ_CD', 'TEST_SCORE_TYP', 'TEST_SCORE_N']
 
-    cols_needed['ACT'] = ['UNIV_ID', 'ACT_ENGLISH', 'ACT_MATH', 'ACT_READING', 'ACT_SCIENCE']
+    cols_needed['act'] = ['UNIV_ID', 'ACT_ENGLISH', 'ACT_MATH', 'ACT_READING', 'ACT_SCIENCE']
 
-    cols_needed['HS GPA'] = ['UNIV_ID', 'GPA_HIGH_SCHOOL']
+    cols_needed['hs_gpa'] = ['UNIV_ID', 'GPA_HIGH_SCHOOL']
 
-    cols_needed['College GPA'] = ['N_NUMBER', 'GPA_CODE', 'GPA']
+    cols_needed['college_gpa'] = ['N_NUMBER', 'GPA_CODE', 'GPA']
 
-    cols_needed['Scholarships'] = ['TermCode', 'SPRIDEN_ID', 'FundTitle', 'FORMATTED_PAID_AMT']
+    cols_needed['scholarships'] = ['TermCode', 'SPRIDEN_ID', 'FundTitle', 'FORMATTED_PAID_AMT']
 
-    cols_needed['AP/IB/AICE'] = ['N_NUMBER', 'TEST_DESC']
+    cols_needed['ap_ib_aice'] = ['N_NUMBER', 'TEST_DESC']
 
-    cols_needed['HS Rank'] = ['N_NUMBER', 'HS_CLASS_RANK', 'HS_CLASS_SIZE']
+    cols_needed['rank'] = ['N_NUMBER', 'HS_CLASS_RANK', 'HS_CLASS_SIZE']
 
-    cols_needed['Distances'] = ['N_NUMBER', 'dist_from_ncf']
+    cols_needed['distance'] = ['N_NUMBER', 'dist_from_ncf']
 
-    cols_needed['Zip Codes'] = ['N_NUMBER', 'ZIP']
+    cols_needed['zip_code'] = ['N_NUMBER', 'ZIP']
 
-    cols_needed['Residency'] = ['N_NUMBER', 'TERM_ATTENDED', 'RESIDENCY']
+    cols_needed['residency'] = ['N_NUMBER', 'TERM_ATTENDED', 'RESIDENCY']
 
-    cols_needed['Income'] = ['SPRIDEN_ID', 'DEMO_TIME_FRAME', 'PARENTS_INCOME', 'STUDENT_INCOME', 'FAMILY_CONTRIB']
+    cols_needed['income'] = ['SPRIDEN_ID', 'DEMO_TIME_FRAME', 'PARENTS_INCOME', 'STUDENT_INCOME', 'FAMILY_CONTRIB']
 
-    cols_needed['Parent Education'] = ['SPRIDEN_ID', 'FatherHIGrade', 'MotherHIGrade']
+    cols_needed['parent_education'] = ['SPRIDEN_ID', 'FatherHIGrade', 'MotherHIGrade']
 
     if st.session_state['option']=='Second term (first year)':
-        cols_needed['Retention'].append('RETURNED_FOR_SPRING')
-        cols_needed['SAP'] = ['N_NUMBER', 'TERM', 'SAPCODE']
+        cols_needed['retention'].append('RETURNED_FOR_SPRING')
+        cols_needed['sap'] = ['N_NUMBER', 'TERM', 'SAPCODE']
 
 
 
