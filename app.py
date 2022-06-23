@@ -296,7 +296,22 @@ def main():
                         income, parent_edu, sap=None)
 
         munged_df = prepare_first_term(retention)
-        
+
+        # Check for Missing Values
+        na_df = pd.DataFrame({'Feature': munged_df.columns.tolist(), 'Prop_NA':(munged_df.isna().sum()/munged_df.shape[0])}).reset_index(drop=True)
+
+        # Check for fully NA columns
+        if (na_df['Prop_NA'] == 1).any():
+            fully_na_features = na_df.loc[na_df['Prop_NA'] == 1]
+            st.write('### WARNING: All values are missing for the following columns:')
+            st.write(fully_na_features.rename(columns = {'Prop_NA': 'Percent_Missing'}))
+
+        # Warn user about Features missing more than 50%
+        elif (na_df['Prop_NA'] >= 0.5).any():
+            half_na_features = na_df.loc[na_df['Prop_NA'] >= 0.5].sort_values(by = 'Prop_NA', ascending=False)
+            st.write('### WARNING: At least 50% of values are missing for the following columns:')
+            st.write(half_na_features.rename(columns = {'Prop_NA': 'Percent_Missing'}))        
+
         # Generate and store predictions
         prediction_df = output_preds(munged_df,
             cat_vars_path='static/retention_pickles/Retention_first_term_cat_vars.pkl', 
