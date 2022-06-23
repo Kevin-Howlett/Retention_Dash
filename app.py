@@ -311,7 +311,7 @@ def main():
 
     # Write the dataset upload schema if any file is not uploaded
     # or the "run analysis" button is not pressed
-    if not st.session_state.button_pressed or not retention_file or not course_desig_file or not sat_file or not act_file or not gpa_file or not col_gpa_file or not scholarships_file or not tests_file or not rank_file or not google_dist_file or not zips_file or not residency_file or not income_file or not parent_edu_file:
+    if not st.session_state.button_pressed or (st.session_state['option']=='Second term (first year)' and len(files_read_in)<15) or (st.session_state['option']=='First term' and len(files_read_in)<14):
         st.markdown("### Dataset Upload Schemas")
         st.markdown('''Please upload the following datasets, with at least the 
             specified columns (Note: Spelling, spacing, and capitalization is important).''')
@@ -322,14 +322,6 @@ def main():
         elif st.session_state['option']=='Second term (first year)':
             table_schemas = open("Table_Schemas_fullyear.txt", "r")
 
-
-
-        # THIS IS OLD CODE
-        # # Change table schema appearance if option is full year
-        # if st.session_state['option']=='Second term (first year)':
-        #     legacy_caching.clear_cache()
-        #     table_schemas = open("Table_Schemas_fullyear.txt", "r")
-        # END OLD CODE
 
 
         st.markdown(table_schemas.read())
@@ -346,7 +338,7 @@ def main():
     # Code to run after all files uploaded and user hit "Run Analysis" button
 
 
-    if st.session_state['button_pressed'] and retention_file and course_desig_file and sat_file and act_file and gpa_file and col_gpa_file and scholarships_file and tests_file and rank_file and google_dist_file and zips_file and residency_file and income_file and parent_edu_file and missing_cols==False and st.session_state['option']=='First term':
+    if st.session_state['button_pressed'] and len(files_read_in) >=14 and missing_cols==False and st.session_state['option']=='First term':
         # Generate and store munged features
         # on which to run model
         retention = prepare_retention(retention, sat, act, col_gpa, gpa, tests, 
@@ -400,7 +392,7 @@ def main():
 
 
 
-    elif st.session_state['button_pressed'] and retention_file and course_desig_file and sat_file and act_file and gpa_file and col_gpa_file and scholarships_file and tests_file and rank_file and google_dist_file and zips_file and residency_file and income_file and parent_edu_file and missing_cols==False and st.session_state['option']=='Second term (first year)':
+    elif st.session_state['button_pressed'] and len(files_read_in) >=15 and missing_cols==False and st.session_state['option']=='Second term (first year)':
         # Generate and store munged features
         # on which to run model
         retention = prepare_retention(retention, sat, act, col_gpa, gpa, tests, 
@@ -409,6 +401,21 @@ def main():
 
         munged_df = prepare_full_year(retention)
         
+        # Check for Missing Values
+        na_df = pd.DataFrame({'Feature': munged_df.columns.tolist(), 'Prop_NA':(munged_df.isna().sum()/munged_df.shape[0])}).reset_index(drop=True)
+
+        # Check for fully NA columns
+        if (na_df['Prop_NA'] == 1).any():
+            fully_na_features = na_df.loc[na_df['Prop_NA'] == 1]
+            st.write('### WARNING: all values are missing for the following columns:')
+            st.write(fully_na_features.rename(columns = {'Prop_NA': 'Percent_Missing'}))
+
+        # Warn user about Features missing more than 50%
+        elif (na_df['Prop_NA'] >= 0.5).any():
+            half_na_features = na_df.loc[na_df['Prop_NA'] >= 0.5].sort_values(by = 'Prop_NA', ascending=False)
+            st.write('### WARNING: at least 50% of values are missing for the following columns:')
+            st.write(half_na_features.rename(columns = {'Prop_NA': 'Percent_Missing'}))
+
         # Generate and store predictions
         prediction_df = output_preds(munged_df,
             cat_vars_path='static/retention_pickles/Retention_full_year_cat_vars.pkl',
