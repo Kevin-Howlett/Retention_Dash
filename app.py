@@ -65,7 +65,27 @@ def main():
     st.sidebar.write('You selected:', option)
 
     st.sidebar.title("Data Upload")
+
+    ### DEBUGGING CHUNK
+
+    with st_stdout("code"):
+        print("Prints as st.code()")
+
+    with st_stdout("info"):
+        print("Prints as st.info()")
+
+    with st_stdout("markdown"):
+        print("Prints as st.markdown()")
+
+    with st_stdout("success"), st_stderr("error"):
+        print("You can print regular success messages")
+        print("And you can redirect errors as well at the same time", file=sys.stderr)
     
+    ### END DEBUGGING CHUNK
+
+
+
+
     files_read_in = dict()
 
     # File uploaders
@@ -1194,31 +1214,12 @@ def treatoutliers(df, columns=None, factor=3, method='IQR', treament='cap'):
 # CODE FOR REDIRECTING TERMINAL OUTPUT
 from contextlib import contextmanager
 from io import StringIO
+from streamlit.script_run_context import SCRIPT_RUN_CONTEXT_ATTR_NAME
 from threading import current_thread
 import streamlit as st
 import sys
 
-# Ref: https://gist.github.com/tvst/036da038ab3e999a64497f42de966a92
-try:
-    from streamlit.scriptrunner import get_script_run_ctx
-except ModuleNotFoundError:
-    # streamlit < 1.8
-    try:
-        from streamlit.script_run_context import get_script_run_ctx  # type: ignore
-    except ModuleNotFoundError:
-        # streamlit < 1.4
-        from streamlit.report_thread import (  # type: ignore
-            get_report_ctx as get_script_run_ctx,
-        )
 
-from streamlit.server.server import Server
-
-def get_session_id() -> str:
-    ctx = get_script_run_ctx()
-    if ctx is None:
-        raise Exception("Failed to get the thread context")
-
-    return ctx.session_id
 
 # REPORT_CONTEXT_ATTR_NAME
 
@@ -1231,7 +1232,7 @@ def st_redirect(src, dst):
         old_write = src.write
 
         def new_write(b):
-            if getattr(current_thread(), get_session_id(), None):
+            if getattr(current_thread(), SCRIPT_RUN_CONTEXT_ATTR_NAME, None):
                 buffer.write(b)
                 output_func(buffer.getvalue())
             else:
@@ -1243,10 +1244,20 @@ def st_redirect(src, dst):
         finally:
             src.write = old_write
 
+
+@contextmanager
+def st_stdout(dst):
+    with st_redirect(sys.stdout, dst):
+        yield
+
+
 @contextmanager
 def st_stderr(dst):
     with st_redirect(sys.stderr, dst):
         yield
+
+
+
 
 
 if __name__ == "__main__":
