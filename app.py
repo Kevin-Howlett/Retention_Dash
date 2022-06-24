@@ -66,26 +66,6 @@ def main():
 
     st.sidebar.title("Data Upload")
 
-    ### DEBUGGING CHUNK
-
-    with st_stdout("code"):
-        print("Prints as st.code()")
-
-    with st_stdout("info"):
-        print("Prints as st.info()")
-
-    with st_stdout("markdown"):
-        print("Prints as st.markdown()")
-
-    with st_stdout("success"), st_stderr("error"):
-        print("You can print regular success messages")
-        print("And you can redirect errors as well at the same time", file=sys.stderr)
-    
-    ### END DEBUGGING CHUNK
-
-
-
-
     files_read_in = dict()
 
     # File uploaders
@@ -106,9 +86,7 @@ def main():
                 matches.append(keyword)
         
         if len(matches) > 1:
-            with st_stderr("error"):
-                print("And you can redirect errors as well at the same time", file=sys.stderr)
-                st.write("### Please rename {} to something like one of the following: {}".format(uploaded_file.name, matches))
+                st.error("### Please rename {} to something like one of the following: {}".format(uploaded_file.name, matches))
 
         #     keyword_count[keyword] = file_name.count(keyword) # store keyword counts in dict
 
