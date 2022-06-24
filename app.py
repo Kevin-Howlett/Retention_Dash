@@ -1220,7 +1220,7 @@ def get_session_id() -> str:
 
     return ctx.session_id
 
-
+# REPORT_CONTEXT_ATTR_NAME
 
 @contextmanager
 def st_redirect(src, dst):
@@ -1231,7 +1231,7 @@ def st_redirect(src, dst):
         old_write = src.write
 
         def new_write(b):
-            if getattr(current_thread(), REPORT_CONTEXT_ATTR_NAME, None):
+            if getattr(current_thread(), get_session_id(), None):
                 buffer.write(b)
                 output_func(buffer.getvalue())
             else:
