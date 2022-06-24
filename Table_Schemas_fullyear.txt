@@ -1,4 +1,4 @@
-### `Retention`
+### `1. Retention`
 
 ```
 "UNIV_ID" : N-Number
@@ -7,11 +7,10 @@
 "BIRTH_DATE" : 
 "GENDER_MASTER" : 
 "RACE_MASTER" :  
-"RETURNED_FOR_SPRING" : binary flag
 ```
 
 
-### `Course Designations`
+### `2. Course Designations`
 
 ```
 "SQ_COUNT_STUDENT_ID" : N-Number
@@ -26,7 +25,7 @@
 ```
 
 
-### `SAT`
+### `3. SAT`
 ```
 "N_NUMBER" : N-Number
 "TEST_REQ_CD" : 
@@ -35,7 +34,7 @@
 ```
 
 
-### `ACT`
+### `4. ACT`
 ```
 "UNIV_ID" : N-Number
 "ACT_ENGLISH" : 
@@ -44,20 +43,20 @@
 "ACT_SCIENCE" : 
 ```
 
-### `HIGH SCHOOL GPA`
+### `5. HIGH SCHOOL GPA`
 ```
 "UNIV_ID" : N-Number
 "GPA_HIGH_SCHOOL" : High School GPA (already on NCF scale)
 ```
 
-### `COLLEGE GPA`
+### `6. COLLEGE GPA`
 ```
 "N_NUMBER" : N-Number
 "GPA_CODE" : 
 "GPA" :  
 ```
 
-### `Scholarships`
+### `7. Scholarships`
 
 ```
 "SPRIDEN_ID" : N-Number
@@ -67,7 +66,7 @@
 ```
 
 
-### `AP-IB-AICE`
+### `8. AP-IB-AICE`
 
 ```
 "N_NUMBER" : N-Number
@@ -75,7 +74,7 @@
 ```
 
 
-### `HS Rank`
+### `9. HS Rank`
 
 ```
 "N_NUMBER" : N-Number
@@ -83,21 +82,21 @@
 "SORHSCH_CLASS_SIZE" : Student's high school graduating class size
 ```
 
-### `Distances`
+### `10. Distances from NCF`
 
 ```
 "N_NUMBER" : N-Number
 "dist_from_ncf" : 
 ```
 
-### `Zip Codes`
+### `11. Zip Codes`
 
 ```
 "N_NUMBER" : N-Number
 "ZIP" : 
 ```
 
-### `Residency`
+### `12. Residency`
 
 ```
 "N_NUMBER" : N-Number
@@ -105,7 +104,7 @@
 "RESIDENCY" :  
 ```
 
-### `Income`
+### `13. Income`
 
 ```
 "SPRIDEN_ID" : N-Number
@@ -116,7 +115,7 @@
 "FAMILY_CONTRIB" : 
 ```
 
-### `Parent Education`
+### `14. Parent Education`
 
 ```
 "SPRIDEN_ID" : N-Number
@@ -124,7 +123,7 @@
 "MotherHIGrade" :  
 ```
 
-### `SAP`
+### `15. SAP`
 
 ```
 "N_NUMBER" : N-Number
