@@ -10,7 +10,7 @@
 ```
 
 
-### `Course Designations`
+### `2. Course Designations`
 
 ```
 "SQ_COUNT_STUDENT_ID" : N-Number
