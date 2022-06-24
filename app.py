@@ -86,7 +86,9 @@ def main():
                 matches.append(keyword)
         
         if len(matches) > 1:
-            st.write("### Please rename {} to something like one of the following: {}".format(uploaded_file.name, matches))
+            with st_stderr("error"):
+                print("And you can redirect errors as well at the same time", file=sys.stderr)
+                st.write("### Please rename {} to something like one of the following: {}".format(uploaded_file.name, matches))
 
         #     keyword_count[keyword] = file_name.count(keyword) # store keyword counts in dict
 
@@ -1189,8 +1191,40 @@ def treatoutliers(df, columns=None, factor=3, method='IQR', treament='cap'):
     return None
 
 
+# CODE FOR REDIRECTING TERMINAL OUTPUT
+from contextlib import contextmanager
+from io import StringIO
+from streamlit.report_thread import REPORT_CONTEXT_ATTR_NAME
+from threading import current_thread
+import streamlit as st
+import sys
 
 
+@contextmanager
+def st_redirect(src, dst):
+    placeholder = st.empty()
+    output_func = getattr(placeholder, dst)
+
+    with StringIO() as buffer:
+        old_write = src.write
+
+        def new_write(b):
+            if getattr(current_thread(), REPORT_CONTEXT_ATTR_NAME, None):
+                buffer.write(b)
+                output_func(buffer.getvalue())
+            else:
+                old_write(b)
+
+        try:
+            src.write = new_write
+            yield
+        finally:
+            src.write = old_write
+
+@contextmanager
+def st_stderr(dst):
+    with st_redirect(sys.stderr, dst):
+        yield
 
 
 if __name__ == "__main__":
