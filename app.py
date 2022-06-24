@@ -87,14 +87,8 @@ def main():
         
         if len(matches) > 1:
                 st.error("### Please rename {} to something like one of the following: {}".format(uploaded_file.name, matches))
-
-        #     keyword_count[keyword] = file_name.count(keyword) # store keyword counts in dict
-
-        # if any(x > 1 for x in keyword_count.values()): # check for counts > 1
-        #     bad_phrases = keyword_count.keys()[keyword_count.values().index()]
-        #     st.write("### Please rename {} to something like one of the following: {}".format(uploaded_file.name, required_datasets))
+                break
         
-
         ## original approach
         # if sum(file_name.count(str(i)) for i in required_datasets) > 1:
         #     st.write("### Please rename {} to something like one of the following: {}".format(uploaded_file.name, required_datasets))
