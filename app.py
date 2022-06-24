@@ -79,12 +79,10 @@ def main():
         file_name = file_name.lower() # convert to lowercase - # sat from fall 2016
 
         # Check for ambiguous file names
-        ## alternate approach
         matches = []
         for keyword in required_datasets:
             if keyword in file_name:
                 matches.append(keyword)
-        
         if len(matches) > 1:
                 st.error("### Please rename {} to something like one of the following: {}".format(uploaded_file.name, matches))
                 break
