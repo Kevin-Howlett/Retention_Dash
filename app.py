@@ -1189,55 +1189,6 @@ def treatoutliers(df, columns=None, factor=3, method='IQR', treament='cap'):
     return None
 
 
-# CODE FOR REDIRECTING TERMINAL OUTPUT
-from contextlib import contextmanager
-from io import StringIO
-from streamlit.script_run_context import SCRIPT_RUN_CONTEXT_ATTR_NAME
-from threading import current_thread
-import streamlit as st
-import sys
-
-
-
-# REPORT_CONTEXT_ATTR_NAME
-
-@contextmanager
-def st_redirect(src, dst):
-    placeholder = st.empty()
-    output_func = getattr(placeholder, dst)
-
-    with StringIO() as buffer:
-        old_write = src.write
-
-        def new_write(b):
-            if getattr(current_thread(), SCRIPT_RUN_CONTEXT_ATTR_NAME, None):
-                buffer.write(b)
-                output_func(buffer.getvalue())
-            else:
-                old_write(b)
-
-        try:
-            src.write = new_write
-            yield
-        finally:
-            src.write = old_write
-
-
-@contextmanager
-def st_stdout(dst):
-    with st_redirect(sys.stdout, dst):
-        yield
-
-
-@contextmanager
-def st_stderr(dst):
-    with st_redirect(sys.stderr, dst):
-        yield
-
-
-
-
-
 if __name__ == "__main__":
     main()
 
