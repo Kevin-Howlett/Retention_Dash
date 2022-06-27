@@ -4,9 +4,10 @@
 "UNIV_ID" : N-Number
 "ADMIT_TERM" : Term admitted, formatted as numeric year + month (eg. Fall 2018 -> 201808)
 "ADMIT_TYPE" : F or T (ie. Freshman, Transfer) 
-"BIRTH_DATE" : 
-"GENDER_MASTER" : 
-"RACE_MASTER" :  
+"BIRTH_DATE" : Date of birth (YYYYMMDD)
+"GENDER_MASTER" : Gender (I.e. "M" or "F")
+"RACE_MASTER" :  Race field from retention (Integer values)
+"RETURNED_FOR_SPRING" : Binary field indicating enrollment status for second semester (1 or 0)
 ```
 
 
@@ -17,9 +18,9 @@
 "TERM" : Term assessed, formatted as numeric year + month (eg. Fall 2018 -> 201808)
 "CLASS_TITLE" : Course Registration Number
 "GRADABLE_INDICATOR" : Course Number (eg. 2250) (used to derive course level)
-"PART-TERM" : 
-"CRS_SUBJ" : 
-"CRS_NUMB" : 
+"PART_TERM" : Course units (I.e. "1", "M1", "M2", "1MC")
+"CRS_SUBJ" : 3-letter subject
+"CRS_NUMB" : 4-digit course number
 "CRS_DIVS_DESC" : Course Division (eg. Natural Science, Humanities, etc.)
 "ACAD_HIST_GRDE_DESC" : Satisfactory vs. Unsatisfactory
 ```
@@ -28,19 +29,19 @@
 ### `3. SAT`
 ```
 "N_NUMBER" : N-Number
-"TEST_REQ_CD" : 
-"TEST_SCORE_TYP" : 
-"TEST_SCORE_N" : 
+"TEST_REQ_CD" : Test (I.e. "S2")
+"TEST_SCORE_TYP" : Test type (I.e. "RW", "M")
+"TEST_SCORE_N" : Test score (200-800)
 ```
 
 
 ### `4. ACT`
 ```
 "UNIV_ID" : N-Number
-"ACT_ENGLISH" : 
-"ACT_MATH" : 
-"ACT_READING" :
-"ACT_SCIENCE" : 
+"ACT_ENGLISH" : English ACT score
+"ACT_MATH" : Math ACT score
+"ACT_READING" : Reading ACT score
+"ACT_SCIENCE" : Science ACT score
 ```
 
 ### `5. HIGH SCHOOL GPA`
@@ -52,8 +53,8 @@
 ### `6. COLLEGE GPA`
 ```
 "N_NUMBER" : N-Number
-"GPA_CODE" : 
-"GPA" :  
+"GPA_CODE" : GPA code (I.e. "FCCOL", "CCOL")
+"GPA" :  College GPA 
 ```
 
 ### `7. Scholarships`
@@ -61,7 +62,7 @@
 ```
 "SPRIDEN_ID" : N-Number
 "TermCode" : Term assessed, formatted as numeric year + month (eg. Fall 2018 -> 201808)
-"FundTitle" : 
+"FundTitle" : Fund title from financial aid file (I.e. "NCF Academic Scholarship", etc.)
 "FORMATTED_PAID_AMT" : Scholarship offer amount (eg. 10029)
 ```
 
@@ -86,48 +87,46 @@
 
 ```
 "N_NUMBER" : N-Number
-"dist_from_ncf" : 
+"dist_from_ncf" : Distance from NCF in mi. (Calculated in Google Colab GCP notebook)
 ```
 
 ### `11. Zip Codes`
 
 ```
 "N_NUMBER" : N-Number
-"ZIP" : 
+"ZIP" : Student home zip code from addresses dataset
 ```
 
 ### `12. Residency`
 
 ```
 "N_NUMBER" : N-Number
-"TERM_ATTENDED" : 
-"RESIDENCY" :  
+"TERM_ATTENDED" : Term attended (I.e. "202108")
+"RESIDENCY" :  State residency ("F" for in-State)
 ```
 
 ### `13. Income`
 
 ```
 "SPRIDEN_ID" : N-Number
-"DEMO_TIME_FRAME" : 
-"PARENTS_INCOME" : 
-"STUDENT_INCOME" : 
-"FAMILY_INCOME" : CAN WE REMOVE THIS ?
-"FAMILY_CONTRIB" : 
+"DEMO_TIME_FRAME" : Academic year (I.e. "20212022")
+"PARENTS_INCOME" : Parent income amount
+"STUDENT_INCOME" : Student income amount
+"FAMILY_CONTRIB" : Family contribution amount
 ```
 
 ### `14. Parent Education`
 
 ```
 "SPRIDEN_ID" : N-Number
-"FatherHIGrade" :
-"MotherHIGrade" :  
+"FatherHIGrade" : Father's highest education (I.e. "3=College or beyond", etc.)
+"MotherHIGrade" : Mother's highest education (I.e. "3=College or beyond", etc.)
 ```
 
 ### `15. SAP`
 
 ```
 "N_NUMBER" : N-Number
-"TERM" : "Term assessed, formatted as numeric year + month (eg. Fall 2018 -> 201808)"
-"SAPCODE" : 
+"TERM" : Term assessed, formatted as numeric year + month (eg. Fall 2018 -> 201808)
+"SAPCODE" : SAP Status code (I.e. "GOOD", "TERMIN", etc.)
 ```
-
