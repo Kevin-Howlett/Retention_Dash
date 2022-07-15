@@ -347,14 +347,16 @@ def main():
             missing_col_list = []
             if k in files_read_in:
                 uploaded_cols = files_read_in[k]
-                for col in cols_needed[k]:
-                    if col not in uploaded_cols:
-                        missing_cols = True
-                        missing_col_list.append(col)
-                if len(missing_col_list) > 0:
-                    st.markdown('#### Columns missing from '+str(k)+':')
-                    st.markdown(missing_col_list)
-                    st.markdown('Please add these columns to the respective dataset.')
+            else:
+                uploaded_cols = []
+            for col in cols_needed[k]:
+                if col not in uploaded_cols:
+                    missing_cols = True
+                    missing_col_list.append(col)
+            if len(missing_col_list) > 0:
+                st.markdown('#### Columns missing from '+str(k)+':')
+                st.markdown(missing_col_list)
+                st.markdown('Please add these columns to the respective dataset.')
 
 
     # if st.session_state['button_pressed']:
