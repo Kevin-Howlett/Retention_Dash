@@ -70,7 +70,10 @@ def main():
 
     # File uploaders
     uploaded_files = st.sidebar.file_uploader("Upload datasets:", accept_multiple_files = True)
-    required_datasets = ['retention', 'course desig', 'sat', 'act', 'hs gpa', 'college gpa', 'scholarships', 'ap ib aice', 'rank', 'distance', 'zip code', 'residency', 'income', 'parent_education' ,'sap'] # partial strings to match
+    required_datasets = ['retention', 'course desig', 'sat', 'act', 'hs gpa', 'college gpa', 'scholarships', 'ap ib aice', 'rank', 'distance', 'zip code', 'residency', 'income', 'parent_education'] # partial strings to match
+    if (st.session_state['option']=='Second term (first year)') and ('sap' not in required_datasets):
+        required_datasets.append('sap')
+
     for uploaded_file in uploaded_files:
         st.write("UPLOADED FILENAME:", uploaded_file.name)
         
@@ -90,7 +93,6 @@ def main():
         ## original approach
         # if sum(file_name.count(str(i)) for i in required_datasets) > 1:
         #     st.write("### Please rename {} to something like one of the following: {}".format(uploaded_file.name, required_datasets))
-        
 
         file_name = re.sub(" ", "_", file_name) # replace spaces with underscores
         print(file_name)
@@ -140,6 +142,33 @@ def main():
         if 'sap' in file_name:
             sap = load_data(uploaded_file)
             files_read_in['sap'] = sap.columns
+
+
+    # Check that all required datasets have been uploaded
+    # matches = list of keywords that have matched filenames
+    # required_datasets = list of required keywords
+    missing_datasets = []
+    st.write("Matches:",matches)
+    st.write("Required_Datasets:", required_datasets)
+    for name in required_datasets:
+        if name not in matches:
+            missing_datasets.append(name)
+    if missing_datasets:
+        st.write("Please upload the following datasets:", missing_datasets)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     # # Retention
     # retention_file = st.sidebar.file_uploader("Upload Retention file:", key=1)
