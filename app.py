@@ -153,10 +153,10 @@ def main():
     # matches = list of keywords that have matched filenames
     # required_datasets = list of required keywords
     missing_datasets = []
-    st.write("Uploaded_Datasets:",uploaded_datasets)
-    st.write("Required_Datasets:", required_datasets)
+    st.write("Uploaded_Datasets:",uploaded_datasets) # will remove
+    st.write("Required_Datasets:", required_datasets) # will remove
     for name in required_datasets:
-        if name not in matches:
+        if name not in uploaded_datasets:
             missing_datasets.append(name)
     if missing_datasets:
         st.write("Please upload the following datasets:", missing_datasets)
