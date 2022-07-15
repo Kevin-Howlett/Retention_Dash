@@ -74,6 +74,8 @@ def main():
     if (st.session_state['option']=='Second term (first year)') and ('sap' not in required_datasets):
         required_datasets.append('sap')
 
+    uploaded_datasets = []
+
     for uploaded_file in uploaded_files:
         st.write("UPLOADED FILENAME:", uploaded_file.name)
         
@@ -86,10 +88,13 @@ def main():
         for keyword in required_datasets:
             if keyword in file_name:
                 matches.append(keyword)
+                uploaded_datasets.append(keyword)
         if len(matches) > 1:
                 st.error("### Please rename {} to something like one of the following: {}".format(uploaded_file.name, matches))
                 break
         
+
+
         ## original approach
         # if sum(file_name.count(str(i)) for i in required_datasets) > 1:
         #     st.write("### Please rename {} to something like one of the following: {}".format(uploaded_file.name, required_datasets))
@@ -148,7 +153,7 @@ def main():
     # matches = list of keywords that have matched filenames
     # required_datasets = list of required keywords
     missing_datasets = []
-    st.write("Matches:",matches)
+    st.write("Uploaded_Datasets:",uploaded_datasets)
     st.write("Required_Datasets:", required_datasets)
     for name in required_datasets:
         if name not in matches:
