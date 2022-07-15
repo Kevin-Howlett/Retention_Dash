@@ -84,10 +84,10 @@ def main():
         file_name = file_name.lower() # convert to lowercase - # sat from fall 2016
 
         # Check for ambiguous file names
-        matches = []
+        matches = [] # stores keyword matches found in filename, should only be one keyword in each filename
         for keyword in required_datasets:
             if keyword in file_name:
-                matches.append(keyword)
+                matches.append(keyword) 
                 uploaded_datasets.append(keyword)
         if len(matches) > 1:
                 st.error("### Please rename {} to something like one of the following: {}".format(uploaded_file.name, matches))
@@ -341,18 +341,33 @@ def main():
     # Check for missing columns from data upload
 
     missing_cols = False
-
-    if st.session_state['button_pressed']:
-        for k in files_read_in.keys(): # Iterate thru each dataset
+    
+    if st.session_state['button_pressed']:    # Check for missing datasets
+        for k in cols_needed:
             missing_col_list = []
-            for col in cols_needed[k]: # Iterate thru each col in dataset
-                if col not in files_read_in[k]: # Check if needed col not in file
-                    missing_col_list.append(col) 
-                    missing_cols = True
-            if len(missing_col_list) > 0:
-                st.markdown('#### Columns missing from '+str(k)+':')
-                st.markdown(missing_col_list)
-                st.markdown('Please add these columns to the respective dataset.')
+            if k in files_read_in:
+                uploaded_cols = cols_needed[k]
+                for col in cols_needed[k]:
+                    if col not in uploaded_cols:
+                        missing_cols = True
+                        missing_col_list.append(col)
+                if len(missing_col_list) > 0:
+                    st.markdown('#### Columns missing from '+str(k)+':')
+                    st.markdown(missing_col_list)
+                    st.markdown('Please add these columns to the respective dataset.')
+
+
+    # if st.session_state['button_pressed']:
+    #     for k in files_read_in.keys(): # Iterate thru each dataset
+    #         missing_col_list = []
+    #         for col in cols_needed[k]: # Iterate thru each col in dataset
+    #             if col not in files_read_in[k]: # Check if needed col not in file
+    #                 missing_col_list.append(col) 
+    #                 missing_cols = True
+    #         if len(missing_col_list) > 0:
+    #             st.markdown('#### Columns missing from '+str(k)+':')
+    #             st.markdown(missing_col_list)
+    #             st.markdown('Please add these columns to the respective dataset.')
 
     # ========================= #
 
