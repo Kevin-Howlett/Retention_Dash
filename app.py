@@ -77,7 +77,6 @@ def main():
     uploaded_datasets = []
 
     for uploaded_file in uploaded_files:
-        st.write("UPLOADED FILENAME:", uploaded_file.name)
         
         file_name = str(uploaded_file.name) # parse file_name such that file_name like variable names - # SAT from fall 2016.csv
         file_name = file_name.rsplit(".", 1)[0] # remove file extension - # SAT from fall 2016
@@ -147,139 +146,6 @@ def main():
         if 'sap' in file_name:
             sap = load_data(uploaded_file)
             files_read_in['sap'] = sap.columns
-
-
-    # Check that all required datasets have been uploaded
-    # matches = list of keywords that have matched filenames
-    # required_datasets = list of required keywords
-    missing_datasets = []
-    st.write("Uploaded_Datasets:",uploaded_datasets) # will remove
-    st.write("Required_Datasets:", required_datasets) # will remove
-    for name in required_datasets:
-        if name not in uploaded_datasets:
-            missing_datasets.append(name)
-    if missing_datasets:
-        st.write("Please upload the following datasets:", missing_datasets)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    # # Retention
-    # retention_file = st.sidebar.file_uploader("Upload Retention file:", key=1)
-    # if retention_file:
-    #      # Can be used wherever a "file-like" object is accepted:
-    #      retention = load_data(retention_file)
-    #      files_read_in['Retention'] = retention.columns
-
-    # # Course designations
-    # course_desig_file = st.sidebar.file_uploader("Upload Course designations file:", key=2)
-    # if course_desig_file:
-    #      # Can be used wherever a "file-like" object is accepted:
-    #      course_desig = load_data(course_desig_file)
-    #      files_read_in['Course Designations'] = course_desig.columns
-
-    # # Course designations
-    # sat_file = st.sidebar.file_uploader("Upload SAT Scores file:", key=3)
-    # if sat_file:
-    #      # Can be used wherever a "file-like" object is accepted:
-    #      sat = load_data(sat_file)
-    #      files_read_in['SAT'] = sat.columns
-
-    # # Course designations
-    # act_file = st.sidebar.file_uploader("Upload ACT Scores file:", key=4)
-    # if act_file:
-    #      # Can be used wherever a "file-like" object is accepted:
-    #      act = load_data(act_file)
-    #      files_read_in['ACT'] = act.columns
-
-    # # Course designations
-    # gpa_file = st.sidebar.file_uploader("Upload High School GPA file:", key=5)
-    # if gpa_file:
-    #      # Can be used wherever a "file-like" object is accepted:
-    #      gpa = load_data(gpa_file)
-    #      files_read_in['HS GPA'] = gpa.columns
-
-    # # Course designations
-    # col_gpa_file = st.sidebar.file_uploader("Upload College GPA file:", key=6)
-    # if col_gpa_file:
-    #      # Can be used wherever a "file-like" object is accepted:
-    #      col_gpa = load_data(col_gpa_file)
-    #      files_read_in['College GPA'] = col_gpa.columns
-
-    # # Course designations
-    # scholarships_file = st.sidebar.file_uploader("Upload Scholarships file:", key=7)
-    # if scholarships_file:
-    #      # Can be used wherever a "file-like" object is accepted:
-    #      scholarships = load_data(scholarships_file)
-    #      files_read_in['Scholarships'] = scholarships.columns
-
-    # # Course designations
-    # tests_file = st.sidebar.file_uploader("Upload AP/IB/AICE file:", key=8)
-    # if tests_file:
-    #      # Can be used wherever a "file-like" object is accepted:
-    #      tests = load_data(tests_file)
-    #      files_read_in['AP/IB/AICE'] = tests.columns
-
-    # # Course designations
-    # rank_file = st.sidebar.file_uploader("Upload HS Rank file:", key=9)
-    # if rank_file:
-    #      # Can be used wherever a "file-like" object is accepted:
-    #      rank = load_data(rank_file)
-    #      files_read_in['HS Rank'] = rank.columns
-
-    # # Course designations
-    # google_dist_file = st.sidebar.file_uploader("Upload Distances from NCF file:", key=10)
-    # if google_dist_file:
-    #      # Can be used wherever a "file-like" object is accepted:
-    #      google_dist = load_data(google_dist_file)
-    #      files_read_in['Distances'] = google_dist.columns
-
-    # # Course designations
-    # zips_file = st.sidebar.file_uploader("Upload Zip Codes file:", key=11)
-    # if zips_file:
-    #      # Can be used wherever a "file-like" object is accepted:
-    #      zips = load_data(zips_file)
-    #      files_read_in['Zip Codes'] = zips.columns
-
-    # # Course designations
-    # residency_file = st.sidebar.file_uploader("Upload Residency file:", key=12)
-    # if residency_file:
-    #      # Can be used wherever a "file-like" object is accepted:
-    #      residency = load_data(residency_file)
-    #      files_read_in['Residency'] = residency.columns
-
-    # # Course designations
-    # income_file = st.sidebar.file_uploader("Upload Income file:", key=13)
-    # if income_file:
-    #      # Can be used wherever a "file-like" object is accepted:
-    #      income = load_data(income_file)
-    #      files_read_in['Income'] = income.columns
-
-    # # Course designations
-    # parent_edu_file = st.sidebar.file_uploader("Upload Parent Education file:", key=14)
-    # if parent_edu_file:
-    #      # Can be used wherever a "file-like" object is accepted:
-    #      parent_edu = load_data(parent_edu_file)
-    #      files_read_in['Parent Education'] = parent_edu.columns
-
-    # # SAP file upload depends on current time being run
-    # if st.session_state['option']=='Second term (first year)':
-    #     sap_file = st.sidebar.file_uploader("Upload SAP file:", key=15)
-    #     if sap_file:
-    #         # Can be used wherever a "file-like" object is accepted:
-    #         sap = load_data(sap_file)
-    #         files_read_in['SAP'] = sap.columns
 
 
 
@@ -358,18 +224,6 @@ def main():
                 st.markdown(missing_col_list)
                 st.markdown('Please add these columns to the respective dataset.')
 
-
-    # if st.session_state['button_pressed']:
-    #     for k in files_read_in.keys(): # Iterate thru each dataset
-    #         missing_col_list = []
-    #         for col in cols_needed[k]: # Iterate thru each col in dataset
-    #             if col not in files_read_in[k]: # Check if needed col not in file
-    #                 missing_col_list.append(col) 
-    #                 missing_cols = True
-    #         if len(missing_col_list) > 0:
-    #             st.markdown('#### Columns missing from '+str(k)+':')
-    #             st.markdown(missing_col_list)
-    #             st.markdown('Please add these columns to the respective dataset.')
 
     # ========================= #
 
