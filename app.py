@@ -346,7 +346,7 @@ def main():
         for k in cols_needed:
             missing_col_list = []
             if k in files_read_in:
-                uploaded_cols = cols_needed[k]
+                uploaded_cols = files_read_in[k]
                 for col in cols_needed[k]:
                     if col not in uploaded_cols:
                         missing_cols = True
